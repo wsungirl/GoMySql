@@ -1,1 +1,1 @@
-# GoMySql
+# Go Interface for MySql
