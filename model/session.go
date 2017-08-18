@@ -1,4 +1,4 @@
-package main
+package model
 
 type Session struct {
 	UserId  int `json:"user_id"`
