@@ -17,6 +17,8 @@ func Setup(mydb *db.DB) *mux.Router {
 	dbGlobal = mydb
 
 	router := setupRouter()
+
+	return router
 }
 
 func setupRouter() *mux.Router {

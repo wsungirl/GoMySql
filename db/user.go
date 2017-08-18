@@ -23,8 +23,8 @@ func (db *DB) AddUser(user *model.User) error {
 		}
 	}
 	_, err := db.Exec(
-		"INSERT INTO users(id, name, password_hash) VALUES(?,?,?)",
-		user.ID, user.Name, user.PasswordHash,
+		"INSERT INTO users(name, password_hash) VALUES(?,?,?)",
+		user.Name, user.PasswordHash,
 	)
 
 	if err != nil {
