@@ -26,4 +26,6 @@ func (user *User) GenPassHash() error {
 	}
 
 	user.PasswordHash = string(hash)
+
+	return nil
 }

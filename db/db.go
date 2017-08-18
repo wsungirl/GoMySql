@@ -10,7 +10,7 @@ type DB struct {
 }
 
 // InitDB initializes SQLite database
-func InitDB(driver, connString string) (*db.DB, error) {
+func InitDB(driver, connString string) (*DB, error) {
 	db, err := sql.Open(driver, connString)
 	if err != nil {
 		return nil, err
