@@ -1,7 +1,7 @@
 package model
 
 type ISessionUserGet interface {
-	GetUser (access_token string) (*User, error)
+	GetSessionUser (access_token string) (*User, error)
 }
 
 type Session struct {
