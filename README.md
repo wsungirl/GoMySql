@@ -22,3 +22,8 @@
     * /dbs/{db_id} -- _Удалить базу_
     * /dbs/{db_id}/tables/{table_id} -- _Удалить таблицу_
     * /dbs/{db_id}/tables/{table_id}/rows/{row_id} -- _Удалить строку_
+
+## Packages
+* go get "github.com/go-sql-driver/mysql"
+* go get "github.com/gorilla/mux"
+* go get "golang.org/x/crypto/bcrypt"

@@ -35,7 +35,7 @@ func loadConfig(filename string) *config {
 func main() {
 	cfg := loadConfig("config.json")
 
-	db, err := db.InitDB("mysql", config.Mysql.FormatDSN())
+	db, err := db.InitDB("mysql", cfg.Mysql.FormatDSN())
 	if err != nil {
 		log.Println(errors.New("Can't connect to DB"))
 	}
