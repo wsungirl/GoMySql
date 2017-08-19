@@ -10,6 +10,7 @@ type IUserAdd interface {
 
 type IUserGet interface {
 	GetUser(id int64) (*User, error)
+	GetUserByName(name string) (*User, error)
 }
 
 type User struct {
