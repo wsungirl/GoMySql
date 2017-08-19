@@ -21,7 +21,7 @@ func (db *DB) GetUser(id int64) (*model.User, error) {
 func (db *DB) GetUserByName(name string) (*model.User, error) {
 	var user model.User
 
-	row := db.QueryRow("SELECT * FROM users WHERE name=?", name)
+	row := db.QueryRow("SELECT id, name, password_hash FROM users WHERE name=?", name)
 
 	if err := row.Scan(&user.ID, &user.Name, &user.PasswordHash); err != nil {
 		if err == sql.ErrNoRows {
@@ -39,6 +39,7 @@ func (db *DB) AddUser(user *model.User) error {
 			return err
 		}
 	}
+
 	_, err := db.Exec(
 		"INSERT INTO users(name, password_hash) VALUES(?,?)",
 		user.Name, user.PasswordHash,

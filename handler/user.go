@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -124,9 +125,13 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Generate and save access_token
-	token := uuid.NewV4()
+	token := hex.EncodeToString(uuid.NewV4().Bytes())
+	session := model.Session{userID, token}
 
-	session := model.Session{userID, string(token.Bytes())}
+	if err = dbGlobal.AddSession(&session); err != nil {
+		returnResult(w, "Can't add user session")
+		return
+	}
 
 	payload, err := json.Marshal(&session)
 	if err != nil {
@@ -138,8 +143,27 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func usersRevokeHandler(w http.ResponseWriter, req *http.Request) {
-	// vars := mux.Vars(req)
-	// userID := vars["user_id"]
+	vars := mux.Vars(req)
+	userID, err := strconv.ParseInt(vars["user_id"], 10, 64)
+	if err != nil {
+		returnResult(w, "Can't parse ID")
+		return
+	}
 
-	returnResult(w, "revoke")
+	user := req.Context().Value(&contextKeyUser).(*model.User)
+
+	if user.ID != userID {
+		returnResult(w, "Can't revoke access_token of other user")
+		return
+	}
+
+	token := req.Context().Value(&contextKeyToken).(*string)
+	session := model.Session{userID, *token}
+
+	if err = dbGlobal.RevokeSession(&session); err != nil {
+		returnResult(w, "Can't revore token: "+err.Error())
+		return
+	}
+
+	returnResult(w, "")
 }

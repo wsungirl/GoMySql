@@ -4,11 +4,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type IUserAdd interface {
+type IUser interface {
 	AddUser(user *User) error
-}
-
-type IUserGet interface {
 	GetUser(id int64) (*User, error)
 	GetUserByName(name string) (*User, error)
 }

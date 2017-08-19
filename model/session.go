@@ -1,10 +1,12 @@
 package model
 
-type ISessionUserGet interface {
-	GetSessionUser(access_token string) (*User, error)
+type ISession interface {
+	GetSessionUser(accessToken string) (*User, error)
+	RevokeSession(session *Session) error
+	AddSession(session *Session) error
 }
 
 type Session struct {
-	UserId      int64  `json:"user_id,omitempty"`
+	UserID      int64  `json:"user_id,omitempty"`
 	AccessToken string `json:"access_token,omitempty"`
 }

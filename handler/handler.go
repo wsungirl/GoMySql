@@ -7,8 +7,9 @@ import (
 	"github.com/wsungirl/GoMySql/db"
 )
 
-const (
-	ContextKeyDB = "db"
+var (
+	contextKeyUser  = "user"
+	contextKeyToken = "token"
 )
 
 var dbGlobal *db.DB
@@ -32,7 +33,7 @@ func setupRouter() *mux.Router {
 	uRtr.HandleFunc("/users/{user_id}/auth", usersAuthHandler).
 		Methods("GET")
 
-	uRtr.HandleFunc("/users/{user_id}/revoke", usersRevokeHandler).
+	uRtr.HandleFunc("/users/{user_id}/revoke", withAuth(usersRevokeHandler)).
 		Methods("GET")
 
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
