@@ -31,7 +31,7 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if err = dbGlobal.AddUser(&user); err != nil {
-		returnResult(w, "Can't add user")
+		returnResult(w, "Can't add user: "+err.Error())
 		return
 	}
 
