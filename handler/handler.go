@@ -14,6 +14,7 @@ var (
 
 var dbGlobal *db.DB
 
+// Setup prepares handlers and sets dbGlobal variable
 func Setup(mydb *db.DB) *mux.Router {
 	dbGlobal = mydb
 

@@ -16,6 +16,9 @@ import (
 	"github.com/wsungirl/GoMySql/model"
 )
 
+// usersHandler handles POST requests to /users
+// if user with provided credentials wasn't found we create one
+// if name and password doesn't match we return error
 func usersHandler(w http.ResponseWriter, req *http.Request) {
 	payload, err := ioutil.ReadAll(req.Body)
 	if err != nil {
@@ -75,6 +78,7 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(payload)
 }
 
+// usersAuthHandler creates session and returns access_token to use with methods wrapped by withAuth
 func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	uidStr := vars["user_id"]
@@ -142,6 +146,7 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(payload)
 }
 
+// usersRevokeHandler deletes session from DB
 func usersRevokeHandler(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	userID, err := strconv.ParseInt(vars["user_id"], 10, 64)

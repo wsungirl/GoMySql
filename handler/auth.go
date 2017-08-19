@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+// withAuth wraps anothed http.HandlerFunc and searches for provided token in DB
+// if token wasn't found returns error
 func withAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authHdr := r.Header.Get("Authorization")
