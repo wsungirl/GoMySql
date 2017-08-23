@@ -36,6 +36,5 @@
     * create
     * update
  * Entities
-    * db
     * table
     * row
