@@ -45,9 +45,5 @@ func (db *DB) AddUser(user *model.User) error {
 		user.Name, user.PasswordHash,
 	)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

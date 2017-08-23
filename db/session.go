@@ -26,23 +26,20 @@ func (db *DB) GetSessionUser(access_token string) (*model.User, error) {
 
 func (db *DB) AddSession(session *model.Session) error {
 
-	if _, err := db.Exec(
+	_, err := db.Exec(
 		"INSERT INTO sessions (user_id, access_token) VALUES (?,?)",
 		session.UserID, session.AccessToken,
-	); err != nil {
-		return err
-	}
+	)
 
-	return nil
+	return err
 }
 
 func (db *DB) RevokeSession(session *model.Session) error {
-	if _, err := db.Exec(
+
+	_, err := db.Exec(
 		"DELETE FROM sessions WHERE access_token=?",
 		session.AccessToken,
-	); err != nil {
-		return err
-	}
+	)
 
-	return nil
+	return err
 }

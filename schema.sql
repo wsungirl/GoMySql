@@ -38,3 +38,6 @@ CREATE TABLE sessions (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Plugin to prevent connections for db users
+INSTALL PLUGIN mysql_no_login SONAME 'mysql_no_login.so';
+

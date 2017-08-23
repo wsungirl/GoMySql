@@ -1,13 +1,13 @@
 package model
 
 type IDatabase interface {
-	GetDBInfo (idDb int64) (*Database, error)
-	GetDBList (idUser int64) ([]string, error)
-	GetTableInfo (idUser int64, idDb int64, tableName string) (*DbTable, error)
-	GetTableRows (idUser int64, idDb int64, tableName string, offset int64, limit int64, fields string) ([]string, error)
-	GetTableRow (idUser int64, idDb int64, tableName string, rowId int64) (string, error)
-	CreateDB (sDb *Database) error
-	CreateTable (sDbT *DbTable) error
+	GetDBInfo(idDb int64) (*Database, error)
+	GetDBList(idUser int64) ([]string, error)
+	GetTableInfo(idUser int64, idDb int64, tableName string) (*DbTable, error)
+	GetTableRows(idUser int64, idDb int64, tableName string, offset int64, limit int64, fields string) ([]string, error)
+	GetTableRow(idUser int64, idDb int64, tableName string, rowId int64) (string, error)
+	CreateDB(sDb *Database) error
+	CreateTable(sDbT *DbTable) error
 	//AddRow ()
 	//DeleteDb ()
 	//DeleteTable ()
@@ -17,22 +17,19 @@ type IDatabase interface {
 }
 
 type DbTable struct {
-	IdUser int64
-	IdDb int64
-	TableName string
-	ColumnTypes []string
-	ColumnNames []string
+	IdUser        int64
+	IdDb          int64
+	TableName     string
+	ColumnTypes   []string
+	ColumnNames   []string
 	ColumnNotNull []bool
-	ColumnKey []string
+	ColumnKey     []string
 	ColumnDefault []string
-	ColumnExtra []string
+	ColumnExtra   []string
 }
 
 type Database struct {
-	ID int64 `json:"id,omitempty"`
-	Uid int64 `json:"user_id,omitempty"`
+	ID     int64  `json:"id,omitempty"`
+	Uid    int64  `json:"user_id,omitempty"`
 	DBname string `json:"db_name,omitempty"`
 }
-
-
-

@@ -6,7 +6,7 @@ import (
 
 func (db *DB) AddAction(hist *model.History) error {
 	_, err := db.Exec("INSERT INTO history VALUES(?,?,?,?);", hist.DbID, hist.UId, hist.Action, hist.Entity)
-	if(err != nil) {
+	if err != nil {
 		return err
 	}
 	return nil
