@@ -27,3 +27,15 @@
 * go get "github.com/go-sql-driver/mysql"
 * go get "github.com/gorilla/mux"
 * go get "golang.org/x/crypto/bcrypt"
+
+
+## Permissions
+
+ * Actions
+    * read
+    * create
+    * update
+ * Entities
+    * db
+    * table
+    * row
