@@ -2,6 +2,8 @@ package db
 
 import (
 	"github.com/wsungirl/GoMySql/model"
+	"errors"
+	"fmt"
 )
 
 func (db *DB) GetDBInfo(dbObj *model.Database) (*model.Database, error) {
@@ -33,9 +35,34 @@ func (db *DB) GetDBList(user *model.User) ([]model.Database, error) {
 }
 
 func (db *DB) CreateDB(sDb *model.Database) error {
-	_, err := db.Exec("INSERT INTO dbs VALUES(?,?,?);", sDb.ID, sDb.Uid, sDb.DBname)
+
+	_, err := db.Exec("INSERT INTO dbs (`user_id`, `db_name`) VALUES(?,?);", sDb.Uid, sDb.DBname)
+
 	if err != nil {
-		return err
+		return errors.New("Error inserting DB info: "+err.Error() )
+	}
+
+	newDbId := db.QueryRow("SELECT LAST_INSERT_ID();")
+
+	if newDbId == nil {
+		return errors.New("Cant get last ID" )
+	}
+
+
+	var schemaName string
+	err = newDbId.Scan(&schemaName)
+	if err != nil{
+		return errors.New("Error getting DbID" + err.Error())
+	}
+
+	schemaName = fmt.Sprintf("db_%d_%s", sDb.Uid, schemaName)
+
+	_, err = db.Exec("CREATE SCHEMA " + schemaName )
+
+
+
+	if err != nil {
+		return errors.New("cant create schema: "+ err.Error())
 	}
 	return nil
 }
