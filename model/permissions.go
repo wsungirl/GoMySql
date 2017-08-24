@@ -1,7 +1,23 @@
 package model
 
+type Action int
+
+type Entity int
+
+const (
+	READ Action = iota
+	CREATE
+	UPDATE
+)
+
+const (
+	DATABASE Entity = iota
+	TABLE
+	ROW
+)
 type IPermissions interface {
 	SetPermissions(perm *Permissions) error
+	CheckPermissions(perm *Permissions) (bool, error)
 }
 
 type Permissions struct {
@@ -10,3 +26,4 @@ type Permissions struct {
 	Action string `json:"action,omitempty"`
 	Entity string `json:"entity,omitempty"`
 }
+
