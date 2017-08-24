@@ -2,7 +2,7 @@ package model
 
 type IDatabase interface {
 	GetDBInfo(idDb int64) (*Database, error)
-	GetDBList(idUser int64) ([]string, error)
+	GetDBList(idUser int64) ([]Database, error)
 	GetTableInfo(idUser int64, idDb int64, tableName string) (*DbTable, error)
 	GetTableRows(idUser int64, idDb int64, tableName string, offset int64, limit int64, fields string) ([]string, error)
 	GetTableRow(idUser int64, idDb int64, tableName string, rowId int64) (string, error)
@@ -16,16 +16,19 @@ type IDatabase interface {
 	//UpdateRows ()
 }
 
+type TableColumn struct {
+	ColumnTypes   string
+	ColumnNames   string
+	ColumnNotNull bool
+	ColumnDefault string
+	ColumnUnique bool
+}
+
 type DbTable struct {
 	IdUser        int64
 	IdDb          int64
 	TableName     string
-	ColumnTypes   []string
-	ColumnNames   []string
-	ColumnNotNull []bool
-	ColumnKey     []string
-	ColumnDefault []string
-	ColumnExtra   []string
+	Columns []TableColumn
 }
 
 type Database struct {
