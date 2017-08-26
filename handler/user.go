@@ -109,13 +109,13 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	userID, err := strconv.ParseInt(uidStr, 10, 64)
+	userID, err := strconv.ParseUint(uidStr, 10, 64)
 	if err != nil {
 		returnResult(w, "Error parsing user id: "+uidStr)
 		return
 	}
 
-	user, err := dbGlobal.GetUser(userID)
+	user, err := dbGlobal.GetUser(uint(userID))
 	if err != nil {
 		returnResult(w, "Can't retrieve user with such id: "+err.Error())
 		return
@@ -130,7 +130,7 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Generate and save access_token
 	token := hex.EncodeToString(uuid.NewV4().Bytes())
-	session := model.Session{userID, token}
+	session := model.Session{User: *user, AccessToken: token}
 
 	if err = dbGlobal.AddSession(&session); err != nil {
 		returnResult(w, "Can't add user session")
@@ -149,7 +149,7 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 // usersRevokeHandler deletes session from DB
 func usersRevokeHandler(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
-	userID, err := strconv.ParseInt(vars["user_id"], 10, 64)
+	userID, err := strconv.ParseUint(vars["user_id"], 10, 64)
 	if err != nil {
 		returnResult(w, "Can't parse ID")
 		return
@@ -157,13 +157,13 @@ func usersRevokeHandler(w http.ResponseWriter, req *http.Request) {
 
 	user := req.Context().Value(&contextKeyUser).(*model.User)
 
-	if user.ID != userID {
+	if user.ID != uint(userID) {
 		returnResult(w, "Can't revoke access_token of other user")
 		return
 	}
 
 	token := req.Context().Value(&contextKeyToken).(*string)
-	session := model.Session{userID, *token}
+	session := model.Session{User: *user, AccessToken: *token}
 
 	if err = dbGlobal.RevokeSession(&session); err != nil {
 		returnResult(w, "Can't revore token: "+err.Error())

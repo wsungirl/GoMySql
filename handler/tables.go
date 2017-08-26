@@ -14,7 +14,7 @@ func tableCreate(w http.ResponseWriter, req *http.Request) {
 	user := req.Context().Value(&contextKeyUser).(*model.User)
 
 	vars := mux.Vars(req)
-	dbID, err := strconv.ParseInt(vars["db_id"], 10, 64)
+	dbID, err := strconv.ParseUint(vars["db_id"], 10, 64)
 	if err != nil {
 		returnResult(w, "Can't parse db id: "+err.Error())
 		return
@@ -40,6 +40,7 @@ func tableCreate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	table.DB.User = *user
+	table.DB.ID = uint(dbID)
 
 	err = dbGlobal.CreateTable(&table)
 	if err != nil {
@@ -51,16 +52,16 @@ func tableCreate(w http.ResponseWriter, req *http.Request) {
 }
 
 func tablesList(w http.ResponseWriter, req *http.Request) {
-	user := req.Context().Value(&contextKeyUser).(*model.User)
+	// user := req.Context().Value(&contextKeyUser).(*model.User)
 
 	vars := mux.Vars(req)
-	dbID, err := strconv.ParseInt(vars["db_id"], 10, 64)
+	dbID, err := strconv.ParseUint(vars["db_id"], 10, 64)
 	if err != nil {
 		returnResult(w, "Can't parse db id: "+err.Error())
 		return
 	}
 
-	dbMod, err := dbGlobal.GetDB(dbID)
+	dbMod, err := dbGlobal.GetDB(uint(dbID))
 	if err != nil {
 		returnResult(w, "Can't get db info: "+err.Error())
 		return

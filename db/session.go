@@ -6,10 +6,15 @@ import (
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetSessionUser(session *model.Session) (user *model.User, err error) {
-	err = db.Model(session).Related(user).Error
+func (db *DB) GetSession(token string) (session *model.Session, err error) {
+	err = db.Where("access_token = ?", token).First(session).Error
 	return
 }
+
+// func (db *DB) GetSessionUser(session *model.Session) (user *model.User, err error) {
+// 	err = db.Model(session).Related(user).Error
+// 	return
+// }
 
 func (db *DB) AddSession(session *model.Session) (err error) {
 	if !db.NewRecord(session) {

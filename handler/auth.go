@@ -22,13 +22,13 @@ func withAuth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		user, err := dbGlobal.GetSessionUser(auth[1])
+		session, err := dbGlobal.GetSession(auth[1])
 		if err != nil {
-			returnResult(w, "Can't retrieve user")
+			returnResult(w, "Can't retrieve session")
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), &contextKeyUser, user)
+		ctx := context.WithValue(r.Context(), &contextKeyUser, &session.User)
 		ctx = context.WithValue(ctx, &contextKeyToken, &auth[1])
 
 		next(w, r.WithContext(ctx))

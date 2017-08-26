@@ -7,12 +7,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/wsungirl/GoMySql/db"
 	"github.com/wsungirl/GoMySql/handler"
 
 	"github.com/go-sql-driver/mysql"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type config struct {
