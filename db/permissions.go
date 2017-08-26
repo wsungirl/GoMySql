@@ -18,7 +18,7 @@ func (db *DB) CheckPermissions(perm * model.Permissions) (bool, error) {
 	var idDb int64
 	err := row.Scan(&idDb)
 	if err != nil {
-		return false, errors.New("Error getting DbID" + err.Error())
+		return false, errors.New("error while checking permissions: " + err.Error())
 	}
 	return true, nil
 }
