@@ -11,7 +11,7 @@ import (
 )
 
 func tableCreate(w http.ResponseWriter, req *http.Request) {
-	user := req.Context().Value(&contextKeyUser).(*model.User)
+	//user := req.Context().Value(&contextKeyUser).(*model.User)
 
 	vars := mux.Vars(req)
 	dbID, err := strconv.ParseUint(vars["db_id"], 10, 64)
@@ -34,15 +34,15 @@ func tableCreate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if table.DB == nil || table.DB.ID == 0 {
-		returnResult(w, "No DB info provided")
+	table.DB, err = dbGlobal.GetDB(uint(dbID))
+
+	if err != nil {
+		returnResult(w, "Can't select table: "+err.Error())
 		return
 	}
 
-	table.DB.User = *user
-	table.DB.ID = uint(dbID)
-
 	err = dbGlobal.CreateTable(&table)
+
 	if err != nil {
 		returnResult(w, "Can't create table: "+err.Error())
 		return
