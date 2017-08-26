@@ -16,8 +16,8 @@
       </md-whiteframe>
 
       <md-list>
-        <md-list-item v-for="db in dbs" :key="db.name">
-          <router-link :to="'/db/'+db.name+'/tables'">{{db.name}}</router-link>
+        <md-list-item v-for="db in dbs" :key="db.id">
+          <router-link :to="'/db/'+db.id+'/tables'">{{db.name}}</router-link>
         </md-list-item>
       </md-list>
 

@@ -17,12 +17,12 @@
           <md-input v-model="column_names"></md-input>
         </md-input-container>
 
-        <md-button :click="insert" class="md-raised md-accent">Insert</md-button>
+        <md-button @click="insert" class="md-raised md-accent">Insert</md-button>
       </md-whiteframe>
 
       <md-list>
         <md-list-item v-for="table in tables" :key="table.name">
-          <router-link :to="'/db/'+$route.params.db_id+'/tables/'+table.name+'/rows'">{{table.name}}</router-link>
+          <router-link :to="'/dbs/'+$route.params.db_id+'/tables/'+table.name+'/rows'">{{table.name}}</router-link>
         </md-list-item>
       </md-list>
 
@@ -70,6 +70,8 @@ export default {
         { name: this.tablename, columns: this.columns })
         .then(function(response) {
           if (!response.data || !response.data.ok) console.log(response)
+
+          console.log(response.data)
 
           vue.created()
         })
