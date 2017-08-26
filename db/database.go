@@ -6,9 +6,10 @@ import (
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetDB(id uint) (dbMod *model.Database, err error) {
-	err = db.Preload("User").First(dbMod, id).Error
-	return
+func (db *DB) GetDB(id uint) (*model.Database, error) {
+	var dbMod model.Database
+	err := db.Preload("User").First(&dbMod, id).Error
+	return &dbMod, err
 }
 
 func (db *DB) GetUserDatabases(user *model.User) ([]model.Database, error) {
