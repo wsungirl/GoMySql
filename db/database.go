@@ -58,7 +58,7 @@ func (db *DB) CreateDB(sDb *model.Database) error {
 
 	schemaName = fmt.Sprintf("db_%d_%s", sDb.Uid, dbIdText)
 
-	_, err = db.Exec("INSERT INTO permissions (`user_id`, `db_id`,`action`, `entity`) VALUES(?,?,?,?),(?,?,?,?);", sDb.Uid, dbIdText, model.READ_ACTION, model.DATABASE_ENTITY, model.UPDATE_ACTION, model.DATABASE_ENTITY, sDb.Uid, dbIdText)
+	_, err = db.Exec("INSERT INTO permissions (`user_id`, `db_id`,`action`, `entity`) VALUES(?,?,?,?),(?,?,?,?);", sDb.Uid, dbIdText, model.READ_ACTION, model.DATABASE_ENTITY, sDb.Uid, dbIdText, model.UPDATE_ACTION, model.DATABASE_ENTITY)
 	if err != nil {
 		return errors.New("Error inserting DB permissions info: "+err.Error() )
 	}
