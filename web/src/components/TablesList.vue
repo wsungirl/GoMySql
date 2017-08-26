@@ -63,11 +63,11 @@ export default {
       var columns = []
 
       for (var i = 0; i < columnArr.length; i++) {
-        columns.push({ name: columnArr[i], type: 'string' })
+        columns.push({ field: columnArr[i], type: 'text' })
       }
 
       this.$http.post(this.$dbapiEndpoint + '/dbs/' + this.$route.params.db_id + '/tables',
-        { name: this.tablename, columns: this.columns })
+        { name: this.tablename, columns: columns })
         .then(function(response) {
           if (!response.data || !response.data.ok) console.log(response)
 
