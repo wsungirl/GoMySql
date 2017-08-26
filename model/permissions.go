@@ -1,20 +1,14 @@
 package model
 
-type Action int
-
-type Entity int
-
 const (
-	READ Action = iota
-	CREATE
-	UPDATE
+	READ_ACTION = "read"
+	CREATE_ACTION = "create"
+	UPDATE_ACTION = "update"
+	DATABASE_ENTITY = "db"
+	TABLE_ENTITY = "table"
+	ROW_ENTITY = "row"
 )
 
-const (
-	DATABASE Entity = iota
-	TABLE
-	ROW
-)
 type IPermissions interface {
 	SetPermissions(perm *Permissions) error
 	CheckPermissions(perm *Permissions) (bool, error)
