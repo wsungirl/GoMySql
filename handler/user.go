@@ -47,7 +47,6 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		dbUser.PasswordHash = ""
 		if payload, err = json.Marshal(&dbUser); err != nil {
 			returnResult(w, "Can't serialize user: "+err.Error())
 			return
@@ -67,8 +66,6 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 		returnResult(w, "Can't retrieve user info: "+err.Error())
 		return
 	}
-
-	dbUser.PasswordHash = ""
 
 	if payload, err = json.Marshal(&dbUser); err != nil {
 		returnResult(w, "Can't send user data")
@@ -136,8 +133,6 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 		returnResult(w, "Can't add user session")
 		return
 	}
-
-	session.User.PasswordHash = ""
 
 	payload, err := json.Marshal(&session)
 	if err != nil {
