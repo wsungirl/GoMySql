@@ -72,3 +72,19 @@ func (db *DB) CreateTable(table *model.DBTable) (err error) {
 
 	return
 }
+
+func (db *DB) AddRowToTable (newRow * model.TableRow) (err error) {
+	columnValuesPattern := strings.Repeat(",?", len(newRow.Table.Columns)-1)
+	var columnNames string
+	for i :=0; i < len(newRow.Table.Columns); i++ {
+		columnNames += newRow.Table.Columns[i].Field+","
+	}
+	columnNames = columnNames[:len(columnNames)-1]
+	fullTableName := newRow.Table.DB.Name+"."+newRow.Table.Name
+	query := "INSERT INTO "+fullTableName+"("+columnNames+") VALUES (?"+columnValuesPattern+");"
+	err = db.Exec(query, newRow.Values...).Error
+	if err != nil {
+		return fmt.Errorf("can`t insert values into table %s", fullTableName)
+	}
+	return nil
+}
