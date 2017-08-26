@@ -74,6 +74,10 @@ func (db *DB) CreateTable(table *model.DBTable) (err error) {
 }
 
 func (db *DB) AddRowToTable (newRow * model.TableRow) (err error) {
+	values := []interface {}{}
+	for i := 0; i < len(newRow.Values); i++ {
+		values = append(values, newRow.Values[i])
+	}
 	columnValuesPattern := strings.Repeat(",?", len(newRow.Table.Columns)-1)
 	var columnNames string
 	for i :=0; i < len(newRow.Table.Columns); i++ {
@@ -82,9 +86,13 @@ func (db *DB) AddRowToTable (newRow * model.TableRow) (err error) {
 	columnNames = columnNames[:len(columnNames)-1]
 	fullTableName := newRow.Table.DB.Name+"."+newRow.Table.Name
 	query := "INSERT INTO "+fullTableName+"("+columnNames+") VALUES (?"+columnValuesPattern+");"
-	err = db.Exec(query, newRow.Values...).Error
+	err = db.Exec(query, values...).Error
 	if err != nil {
 		return fmt.Errorf("can`t insert values into table %s", fullTableName)
 	}
 	return nil
 }
+
+//func (db *DB) SelectRows (uint idDb, string tableName, fields string, offset int64, limit int64) {
+//	rows, err := db.Query("SELECT ")
+//}
