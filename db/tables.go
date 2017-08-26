@@ -53,7 +53,7 @@ func (db *DB) CreateTable(table *model.DBTable) (err error) {
 
 	query := fmt.Sprintf(
 		`CREATE TABLE %s.%s (%s)`,
-		table.DB.Name, table.Name,
+		table.DB.GetStoredName(), table.Name,
 		strings.Join(colStrings, ","),
 	)
 
