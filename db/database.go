@@ -50,19 +50,23 @@ func (db *DB) CreateDB(sDb *model.Database) error {
 
 
 	var schemaName string
-	err = newDbId.Scan(&schemaName)
+	var dbIdText string
+	err = newDbId.Scan(&dbIdText)
 	if err != nil{
 		return errors.New("Error getting DbID" + err.Error())
 	}
 
-	schemaName = fmt.Sprintf("db_%d_%s", sDb.Uid, schemaName)
+	schemaName = fmt.Sprintf("db_%d_%s", sDb.Uid, dbIdText)
+
+	_, err = db.Exec("INSERT INTO permissions (`user_id`, `db_id`,`action`, `entity`) VALUES(?,?,'select', '/dbs'),(?,?,'update', '/dbs');", sDb.Uid, dbIdText, sDb.Uid, dbIdText)
+	if err != nil {
+		return errors.New("Error inserting DB permissions info: "+err.Error() )
+	}
 
 	_, err = db.Exec("CREATE SCHEMA " + schemaName )
-
-
-
 	if err != nil {
 		return errors.New("cant create schema: "+ err.Error())
 	}
+
 	return nil
 }
