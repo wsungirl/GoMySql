@@ -12,7 +12,7 @@ type User struct {
 	CreatedAt time.Time `json:"-"`
 
 	Name         string `json:"name,omitempty"`
-	PasswordHash string `json:"password_hash,omitempty"`
+	PasswordHash string `json:"-"`
 	Password     string `gorm:"-" json:"password,omitempty"`
 
 	Databases []Database `json:"-"`
