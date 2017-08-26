@@ -7,7 +7,7 @@ import (
 )
 
 func (db *DB) GetDB(id uint) (dbMod *model.Database, err error) {
-	err = db.First(dbMod, id).Error
+	err = db.Preload("User").First(dbMod, id).Error
 	return
 }
 

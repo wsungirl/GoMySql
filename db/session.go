@@ -7,7 +7,7 @@ import (
 )
 
 func (db *DB) GetSession(token string) (session *model.Session, err error) {
-	err = db.Where("access_token = ?", token).First(session).Error
+	err = db.Preload("User").Where("access_token = ?", token).First(session).Error
 	return
 }
 

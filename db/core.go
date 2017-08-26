@@ -1,7 +1,7 @@
 package db
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	"github.com/wsungirl/GoMySql/model"
@@ -23,17 +23,19 @@ func InitDB(driver, connString string) (*DB, error) {
 		&model.User{},
 		&model.Database{},
 		&model.History{},
-		&model.Permissions{},
+		&model.Permission{},
 		&model.Session{},
 	}
 
-	for t := range tables {
-		if db != nil && !db.HasTable(t) {
-			db.CreateTable(t)
-			continue
+	for _, t := range tables {
+		if db != nil {
+			err = db.AutoMigrate(t).Error
+			if err == nil {
+				continue
+			}
 		}
 
-		return nil, errors.New("Can't create tables")
+		return nil, fmt.Errorf("Can't create tables: %v", err)
 	}
 
 	return &DB{db}, nil

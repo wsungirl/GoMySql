@@ -3,17 +3,26 @@ package db
 import (
 	"fmt"
 
+	"github.com/jinzhu/gorm"
+
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetUser(id uint) (user *model.User, err error) {
-	err = db.First(user, id).Error
-	return
+func (db *DB) GetUser(id uint) (*model.User, error) {
+	var user model.User
+
+	err := db.First(&user, id).Error
+	return &user, err
 }
 
-func (db *DB) GetUserByName(name string) (user *model.User, err error) {
-	err = db.Where("name=?", name).First(user).Error
-	return
+func (db *DB) GetUserByName(name string) (*model.User, error) {
+	var user model.User
+
+	err := db.Where("name=?", name).First(&user).Error
+	if err == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	return &user, err
 }
 
 func (db *DB) AddUser(user *model.User) (err error) {

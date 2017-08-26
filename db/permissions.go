@@ -6,7 +6,7 @@ import (
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) SetPermissions(perm *model.Permissions) (err error) {
+func (db *DB) SetPermission(perm *model.Permission) (err error) {
 	if db.NewRecord(perm) {
 		err = fmt.Errorf("Can't create permission: %v",
 			db.Create(perm).Error)

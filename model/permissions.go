@@ -23,16 +23,17 @@ const (
 	PermEntRow
 )
 
-type Permissions struct {
+type Permission struct {
 	ID        uint       `gorm:"primary_key" json:"-"`
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
 	DeletedAt *time.Time `sql:"index" json:"-"`
 
-	DB   Database      `json:"db"`
+	DB   Database      `gorm:"ForeignKey:DBID" json:"db"`
 	DBID sql.NullInt64 `gorm:"index" json:"-"`
 
-	User User `gorm:"index" json:"user"`
+	User   User          `gorm:"ForeignKey:UserID" json:"user"`
+	UserID sql.NullInt64 `gorm:"index" json:"-"`
 
 	Action string `json:"action"`
 	Entity string `json:"entity"`

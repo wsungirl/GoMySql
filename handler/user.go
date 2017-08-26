@@ -64,7 +64,7 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 
 	dbUser, err = dbGlobal.GetUserByName(user.Name)
 	if err != nil {
-		returnResult(w, "Can't retrieve user info")
+		returnResult(w, "Can't retrieve user info: "+err.Error())
 		return
 	}
 
@@ -131,6 +131,9 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 	// Generate and save access_token
 	token := hex.EncodeToString(uuid.NewV4().Bytes())
 	session := model.Session{User: *user, AccessToken: token}
+
+	session.User.PasswordHash = ""
+	session.User.Password = ""
 
 	if err = dbGlobal.AddSession(&session); err != nil {
 		returnResult(w, "Can't add user session")

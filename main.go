@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -38,7 +38,7 @@ func main() {
 
 	db, err := db.InitDB("mysql", cfg.Mysql.FormatDSN())
 	if err != nil {
-		log.Println(errors.New("Can't connect to DB"))
+		log.Fatal(fmt.Errorf("Init error: %v", err))
 	}
 
 	router := handler.Setup(db)
