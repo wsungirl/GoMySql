@@ -4,30 +4,38 @@ import (
 	"fmt"
 	"strings"
 
+	"log"
+
 	"github.com/wsungirl/GoMySql/model"
 )
 
 func (db *DB) GetDatabaseTables(dbMod *model.Database) (tables []model.DBTable, err error) {
 	var tableNames []string
 
-	err = db.Raw("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?;", dbMod.GetStoredName()).Scan(&tableNames).Error
-	if err != nil {
-		err = fmt.Errorf("Can't get tables: %v", err)
-		return
+	rows, err := db.Raw("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?", dbMod.GetStoredName()).Rows()
+	defer rows.Close()
+
+	for rows.Next() {
+		var col string
+		rows.Scan(&col)
+		tableNames = append(tableNames, col)
 	}
+
+	log.Println(tableNames)
 
 	var cols []model.TableColumn
 	var table model.DBTable
 
 	for _, t := range tableNames {
-		err = db.Exec(`
+
+		err = db.Raw(`
 			SELECT
 				COLUMN_NAME as field,
 				COLUMN_TYPE as type
 			FROM information_schema.COLUMNS
 			WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?`,
 			dbMod.GetStoredName(), t,
-		).Scan(cols).Error
+		).Scan(&cols).Error
 		if err != nil {
 			err = fmt.Errorf("Can't parse columns: %v", err)
 			return
