@@ -17,11 +17,11 @@ type IDatabase interface {
 }
 
 type TableColumn struct {
-	ColumnTypes   string
-	ColumnNames   string
-	ColumnNotNull bool
-	ColumnDefault string
-	ColumnUnique bool
+	ColumnType   string
+	ColumnName   string
+	//ColumnNotNull bool
+	//ColumnDefault string
+	//ColumnUnique bool
 }
 
 type DbTable struct {
