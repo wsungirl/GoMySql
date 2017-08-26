@@ -6,9 +6,12 @@ import (
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetSession(token string) (session *model.Session, err error) {
-	err = db.Preload("User").Where("access_token = ?", token).First(session).Error
-	return
+func (db *DB) GetSession(token string) (*model.Session, error) {
+	var session model.Session
+
+	err := db.Preload("User").Where("access_token = ?", token).First(&session).Error
+
+	return &session, err
 }
 
 // func (db *DB) GetSessionUser(session *model.Session) (user *model.User, err error) {
