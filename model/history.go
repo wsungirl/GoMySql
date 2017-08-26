@@ -1,12 +1,16 @@
 package model
 
-type IHistory interface {
-	AddAction(hist *History) error
-}
+import "time"
+import "database/sql"
 
 type History struct {
-	DbID   int64  `json:"db_id,omitempty"`
-	UId    int64  `json:"u_id,omitempty"`
-	Action string `json:"action,omitempty"`
-	Entity string `json:"entity,omitempty"`
+	CreatedAt time.Time
+
+	DB   Database      `json:"db"`
+	DBID sql.NullInt64 `gorm:"index" json:"-"`
+
+	User User `gorm:"index" json:"user"`
+
+	Action string `gorm:"type:varchar(16)" json:"action"`
+	Entity string `gorm:"type:varchar(16)" json:"entity"`
 }

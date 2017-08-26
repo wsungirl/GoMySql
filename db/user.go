@@ -1,49 +1,37 @@
 package db
 
 import (
-	"database/sql"
+	"fmt"
 
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetUser(id int64) (*model.User, error) {
-	var user model.User
-
-	row := db.QueryRow("SELECT * FROM users WHERE id=?", id)
-
-	if err := row.Scan(&user.ID, &user.Name, &user.PasswordHash); err != nil {
-		return nil, err
-	}
-
-	return &user, nil
+func (db *DB) GetUser(id uint) (user *model.User, err error) {
+	err = db.First(user, id).Error
+	return
 }
 
-func (db *DB) GetUserByName(name string) (*model.User, error) {
-	var user model.User
-
-	row := db.QueryRow("SELECT id, name, password_hash FROM users WHERE name=?", name)
-
-	if err := row.Scan(&user.ID, &user.Name, &user.PasswordHash); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
-		return nil, err
-	}
-
-	return &user, nil
+func (db *DB) GetUserByName(name string) (user *model.User, err error) {
+	err = db.Where("name=?", name).First(user).Error
+	return
 }
 
-func (db *DB) AddUser(user *model.User) error {
+func (db *DB) AddUser(user *model.User) (err error) {
 	if user.PasswordHash == "" {
-		if err := user.GenPassHash(); err != nil {
-			return err
+		if err = user.GenPassHash(); err != nil {
+			return fmt.Errorf("Can't gen password hash: %v", err)
 		}
 	}
 
-	_, err := db.Exec(
-		"INSERT INTO users(name, password_hash) VALUES(?,?)",
-		user.Name, user.PasswordHash,
-	)
+	if !db.NewRecord(user) {
+		goto ERR
+	}
 
-	return err
+	err = db.Create(user).Error
+	if err == nil {
+		return
+	}
+
+ERR:
+	return fmt.Errorf("Can't create history item: %v", err)
 }

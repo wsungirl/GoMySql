@@ -1,13 +1,21 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) AddAction(hist *model.History) error {
-	_, err := db.Exec("INSERT INTO history VALUES(?,?,?,?);", hist.DbID, hist.UId, hist.Action, hist.Entity)
-	if err != nil {
-		return err
+func (db *DB) AddHistory(hist *model.History) (err error) {
+	if !db.NewRecord(hist) {
+		goto ERR
 	}
-	return nil
+
+	err = db.Create(hist).Error
+	if err == nil {
+		return
+	}
+
+ERR:
+	return fmt.Errorf("Can't create history item: %v", err)
 }

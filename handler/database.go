@@ -1,14 +1,14 @@
 package handler
 
 import (
-	"net/http"
-	"github.com/wsungirl/GoMySql/model"
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
+
+	"github.com/wsungirl/GoMySql/model"
 )
 
-
-func databasesCreate(w http.ResponseWriter, req *http.Request){
+func databasesCreate(w http.ResponseWriter, req *http.Request) {
 	user := req.Context().Value(&contextKeyUser).(*model.User)
 
 	payload, err := ioutil.ReadAll(req.Body)
@@ -25,28 +25,27 @@ func databasesCreate(w http.ResponseWriter, req *http.Request){
 		return
 	}
 
-	database.Uid = user.ID
+	database.User = *user
 	err = dbGlobal.CreateDB(&database)
 	if err != nil {
-		returnResult(w, "cant create database : " + err.Error())
+		returnResult(w, "cant create database : "+err.Error())
 		return
 	}
 
-	returnResult(w,"" )
-
+	returnResult(w, "")
 }
 
-func databasesList(w http.ResponseWriter, req *http.Request){
+func databasesList(w http.ResponseWriter, req *http.Request) {
 	user := req.Context().Value(&contextKeyUser).(*model.User)
 	dbList, err := dbGlobal.GetDBList(user)
 	if err != nil {
-		returnResult(w, "cant get dblist: " + err.Error())
+		returnResult(w, "cant get dblist: "+err.Error())
 		return
 	}
 
 	payload, err := json.Marshal(dbList)
 	if err != nil {
-		returnResult(w, "cant Marshal : " + err.Error())
+		returnResult(w, "cant Marshal : "+err.Error())
 		return
 	}
 

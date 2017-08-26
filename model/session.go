@@ -1,14 +1,10 @@
 package model
 
-// ISession is a public interface that should be implemented by DB
-type ISession interface {
-	GetSessionUser(accessToken string) (*User, error)
-	RevokeSession(session *Session) error
-	AddSession(session *Session) error
-}
+import "github.com/jinzhu/gorm"
 
 // Session struct represents row of DB table sessions
 type Session struct {
-	UserID      int64  `json:"user_id,omitempty"`
-	AccessToken string `json:"access_token,omitempty"`
+	gorm.Model
+	User        User   `gorm:"index"`
+	AccessToken string `gorm:"type:char(36)" json:"access_token"`
 }

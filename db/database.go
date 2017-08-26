@@ -1,68 +1,45 @@
 package db
 
 import (
-	"github.com/wsungirl/GoMySql/model"
-	"errors"
 	"fmt"
+
+	"github.com/wsungirl/GoMySql/model"
 )
 
-func (db *DB) GetDBInfo(dbObj *model.Database) (*model.Database, error) {
-	var mDb model.Database
-	row := db.QueryRow("SELECT id, user_id, db_name FROM dbs WHERE id=?", dbObj.ID)
-	err := row.Scan(&mDb.ID, &mDb.Uid, &mDb.DBname)
-	if err != nil {
-		return nil, err
-	}
-	return &mDb, nil
+func (db *DB) GetDB(id uint) (dbMod *model.Database, err error) {
+	err = db.First(dbMod, id).Error
+	return
 }
 
-func (db *DB) GetDBList(user *model.User) ([]model.Database, error) {
-	var tmpDB model.Database
-	var databases []model.Database
-	rows, err := db.Query("SELECT id, user_id, db_name  FROM dbs WHERE user_id=?", user.ID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		err := rows.Scan(&tmpDB.ID, &tmpDB.Uid, &tmpDB.DBname)
-		if err != nil {
-			return nil, err
-		}
-		databases = append(databases, tmpDB)
-	}
-	return databases, nil
+func (db *DB) GetUserDatabases(user *model.User) (dbs []model.Database, err error) {
+	err = db.Model(user).Related(dbs).Error
+	return
 }
 
-func (db *DB) CreateDB(sDb *model.Database) error {
+func (db *DB) CreateDB(dbMod *model.Database) (err error) {
 
-	_, err := db.Exec("INSERT INTO dbs (`user_id`, `db_name`) VALUES(?,?);", sDb.Uid, sDb.DBname)
+	if db.NewRecord(dbMod) {
+		goto NOERR
+	}
 
+ERR:
+	return fmt.Errorf("Can't create new database record: %v", err)
+
+NOERR:
+	err = db.Create(dbMod).Error
 	if err != nil {
-		return errors.New("Error inserting DB info: "+err.Error() )
+		goto ERR
 	}
 
-	newDbId := db.QueryRow("SELECT LAST_INSERT_ID();")
-
-	if newDbId == nil {
-		return errors.New("Cant get last ID" )
+	err = db.Exec("CREATE SCHEMA " + dbMod.GetStoredName()).Error
+	if err == nil {
+		return
 	}
 
-
-	var schemaName string
-	err = newDbId.Scan(&schemaName)
-	if err != nil{
-		return errors.New("Error getting DbID" + err.Error())
+	delErr := db.Delete(dbMod).Error
+	if delErr != nil {
+		return fmt.Errorf("Can't delete newly created db: <%v> while creating schema: %v", delErr, err)
 	}
 
-	schemaName = fmt.Sprintf("db_%d_%s", sDb.Uid, schemaName)
-
-	_, err = db.Exec("CREATE SCHEMA " + schemaName )
-
-
-
-	if err != nil {
-		return errors.New("cant create schema: "+ err.Error())
-	}
-	return nil
+	return fmt.Errorf("Can't create schema: %v", err)
 }

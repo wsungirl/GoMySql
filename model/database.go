@@ -1,38 +1,40 @@
 package model
 
-type IDatabase interface {
-	GetDBInfo(idDb int64) (*Database, error)
-	GetDBList(idUser int64) ([]Database, error)
-	GetTableInfo(idUser int64, idDb int64, tableName string) (*DbTable, error)
-	GetTableRows(idUser int64, idDb int64, tableName string, offset int64, limit int64, fields string) ([]string, error)
-	GetTableRow(idUser int64, idDb int64, tableName string, rowId int64) (string, error)
-	CreateDB(sDb *Database) error
-	CreateTable(sDbT *DbTable) error
-	//AddRow ()
-	//DeleteDb ()
-	//DeleteTable ()
-	//DeleteRow ()
-	//UpdateRow ()
-	//UpdateRows ()
+import (
+	"fmt"
+	"time"
+)
+
+type TableRow struct {
+	ID     uint     `json:"id"`
+	Values []string `json:"values"`
+	Table  *DBTable `json:"table"`
 }
 
 type TableColumn struct {
-	ColumnTypes   string
-	ColumnNames   string
-	ColumnNotNull bool
-	ColumnDefault string
-	ColumnUnique bool
+	Field string `gorm:"column:field" json:"field"`
+	Type  string `gorm:"column:type" json:"type"`
+	// Null  bool     `json:"null"`
+	// Key   string   `json:"key"`
+	// Default string `json:"default"`
+	// Extra string	  `json:"extra"`
 }
 
-type DbTable struct {
-	IdUser        int64
-	IdDb          int64
-	TableName     string
-	Columns []TableColumn
+type DBTable struct {
+	Name    string        `json:"name"`
+	Columns []TableColumn `json:"columns"`
+
+	DB *Database `json:"db"`
 }
 
 type Database struct {
-	ID     int64  `json:"id,omitempty"`
-	Uid    int64  `json:"user_id,omitempty"`
-	DBname string `json:"db_name,omitempty"`
+	ID        uint      `gorm:"primary_key" json:"id,omitempty"`
+	CreatedAt time.Time `json:"-"`
+
+	User User   `gorm:"index" json:"user,omitmpty"`
+	Name string `json:"name,omitempty"`
+}
+
+func (db *Database) GetStoredName() string {
+	return fmt.Sprintf("db_%d_%d", db.User.ID, db.ID)
 }

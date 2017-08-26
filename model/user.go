@@ -1,22 +1,21 @@
 package model
 
 import (
+	"time"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
-// IUser is a public interface that should be implemented by DB
-type IUser interface {
-	AddUser(user *User) error
-	GetUser(id int64) (*User, error)
-	GetUserByName(name string) (*User, error)
-}
-
 // User struct represents row of DB table users
 type User struct {
-	ID           int64  `json:",omitempty"`
-	Name         string `json:",omitempty"`
-	Password     string `json:",omitempty"`
+	ID        uint      `gorm:"primary_key" json:"id,omitempty"`
+	CreatedAt time.Time `json:"-"`
+
+	Name         string `json:"name,omitempty"`
 	PasswordHash string `json:"password_hash,omitempty"`
+	Password     string `gorm:"-" json:"password,omitempty"`
+
+	Databases []Database
 }
 
 // GenPassHash generates bcrypt hash and rewrites PasswordHash field of User struct

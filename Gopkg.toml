@@ -13,3 +13,11 @@
 [[constraint]]
   name = "github.com/satori/go.uuid"
   version = "^1.1"
+
+[[constraint]]
+  name = "github.com/jinzhu/gorm"
+  version = "^1.0"
+
+[[constraint]]
+  name = "github.com/jinzhu/gorm/dialects/mysql"
+  branch = "master"

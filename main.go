@@ -7,7 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/wsungirl/GoMySql/db"
 	"github.com/wsungirl/GoMySql/handler"
 
@@ -44,7 +45,7 @@ func main() {
 
 	http.Handle("/", router)
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":6060", nil); err != nil {
 		log.Println(err)
 	}
 }

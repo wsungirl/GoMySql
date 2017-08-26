@@ -36,7 +36,7 @@ func usersHandler(w http.ResponseWriter, req *http.Request) {
 
 	dbUser, err := dbGlobal.GetUserByName(user.Name)
 	if err != nil {
-		returnResult(w, "Can't retrieve user info: " + err.Error())
+		returnResult(w, "Can't retrieve user info: "+err.Error())
 		return
 	}
 
