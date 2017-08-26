@@ -132,13 +132,12 @@ func usersAuthHandler(w http.ResponseWriter, req *http.Request) {
 	token := hex.EncodeToString(uuid.NewV4().Bytes())
 	session := model.Session{User: *user, AccessToken: token}
 
-	session.User.PasswordHash = ""
-	session.User.Password = ""
-
 	if err = dbGlobal.AddSession(&session); err != nil {
 		returnResult(w, "Can't add user session")
 		return
 	}
+
+	session.User.PasswordHash = ""
 
 	payload, err := json.Marshal(&session)
 	if err != nil {

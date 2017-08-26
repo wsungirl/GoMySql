@@ -11,9 +11,10 @@ func (db *DB) GetDB(id uint) (dbMod *model.Database, err error) {
 	return
 }
 
-func (db *DB) GetUserDatabases(user *model.User) (dbs []model.Database, err error) {
-	err = db.Model(user).Related(dbs).Error
-	return
+func (db *DB) GetUserDatabases(user *model.User) ([]model.Database, error) {
+	var dbs []model.Database
+	err := db.Model(user).Related(&dbs).Error
+	return dbs, err
 }
 
 func (db *DB) CreateDB(dbMod *model.Database) (err error) {
