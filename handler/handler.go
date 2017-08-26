@@ -37,11 +37,11 @@ func setupRouter() *mux.Router {
 	uRtr.HandleFunc("/users/{user_id}/revoke", withAuth(usersRevokeHandler)).
 		Methods("GET")
 
-	uRtr.HandleFunc("/dbs",withAuth(databasesCreate)).
-		Methods("POST");
+	uRtr.HandleFunc("/dbs", withAuth(databasesCreate)).
+		Methods("POST")
 
-	uRtr.HandleFunc("/dbs",withAuth(databasesList)).
-		Methods("GET");
+	uRtr.HandleFunc("/dbs", withAuth(databasesList)).
+		Methods("GET")
 
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 

@@ -45,6 +45,8 @@ func main() {
 
 	http.Handle("/", router)
 
+	log.Println("Server started...")
+
 	if err := http.ListenAndServe(":6060", nil); err != nil {
 		log.Println(err)
 	}
