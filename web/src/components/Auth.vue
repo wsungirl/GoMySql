@@ -68,9 +68,9 @@ var authObject = {
 
       this.$http.post(this.$dbapiEndpoint + '/users', { name: this.name, password: this.password })
         .then(function(response) {
-          if (!response.data || !response.data.ID) console.log(response)
+          if (!response.data || !response.data.id) console.log(response)
 
-          authObject.user.id = response.data.ID
+          authObject.user.id = response.data.id
           vue.authenticate()
         })
         .catch(function(error) {

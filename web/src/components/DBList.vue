@@ -16,8 +16,8 @@
       </md-whiteframe>
 
       <md-list>
-        <md-list-item v-for="db in dbs" :key="db.id">
-          <router-link :to="'/db/'+db.id+'/tables'">{{db.name}}</router-link>
+        <md-list-item v-for="db in dbs" :key="db.name">
+          <router-link :to="'/db/'+db.name+'/tables'">{{db.name}}</router-link>
         </md-list-item>
       </md-list>
 
@@ -41,6 +41,8 @@ export default {
       this.$http.get(this.$dbapiEndpoint + '/dbs')
         .then(function(response) {
           if (!response.data) console.log(response)
+
+          console.log(response.data)
 
           vue.dbs = response.data
         })
