@@ -4,6 +4,7 @@
         "passwd": "password",
         "net": "tcp",
         "addr": "localhost:3306",
-        "dbname": "dbname"
+        "dbname": "dbname",
+        "parsetime": true
     }
 }
