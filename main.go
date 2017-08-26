@@ -2,17 +2,17 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/wsungirl/GoMySql/db"
 	"github.com/wsungirl/GoMySql/handler"
 
 	"github.com/go-sql-driver/mysql"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type config struct {
@@ -38,7 +38,7 @@ func main() {
 
 	db, err := db.InitDB("mysql", cfg.Mysql.FormatDSN())
 	if err != nil {
-		log.Println(errors.New("Can't connect to DB"))
+		log.Fatal(fmt.Errorf("Init error: %v", err))
 	}
 
 	router := handler.Setup(db)

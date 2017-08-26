@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 )
@@ -31,7 +32,9 @@ type Database struct {
 	ID        uint      `gorm:"primary_key" json:"id,omitempty"`
 	CreatedAt time.Time `json:"-"`
 
-	User User   `gorm:"index" json:"user,omitmpty"`
+	User   User          `gorm:"ForeignKey:UserID" json:"user,omitmpty"`
+	UserID sql.NullInt64 `gorm:"index" json:"-"`
+
 	Name string `json:"name,omitempty"`
 }
 

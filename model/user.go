@@ -15,7 +15,7 @@ type User struct {
 	PasswordHash string `json:"password_hash,omitempty"`
 	Password     string `gorm:"-" json:"password,omitempty"`
 
-	Databases []Database
+	Databases []Database `json:"-"`
 }
 
 // GenPassHash generates bcrypt hash and rewrites PasswordHash field of User struct

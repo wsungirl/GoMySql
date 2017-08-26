@@ -37,7 +37,7 @@ func databasesCreate(w http.ResponseWriter, req *http.Request) {
 
 func databasesList(w http.ResponseWriter, req *http.Request) {
 	user := req.Context().Value(&contextKeyUser).(*model.User)
-	dbList, err := dbGlobal.GetDBList(user)
+	dbList, err := dbGlobal.GetUserDatabases(user)
 	if err != nil {
 		returnResult(w, "cant get dblist: "+err.Error())
 		return
