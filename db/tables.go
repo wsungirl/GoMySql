@@ -10,7 +10,7 @@ import (
 func (db *DB) GetDatabaseTables(dbMod *model.Database) (tables []model.DBTable, err error) {
 	var tableNames []string
 
-	err = db.Exec("SHOW TABLES FROM " + dbMod.GetStoredName()).Scan(tableNames).Error
+	err = db.Raw("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?;", dbMod.GetStoredName()).Scan(&tableNames).Error
 	if err != nil {
 		err = fmt.Errorf("Can't get tables: %v", err)
 		return
