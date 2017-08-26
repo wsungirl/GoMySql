@@ -17,7 +17,7 @@
 
       <md-list>
         <md-list-item v-for="db in dbs" :key="db.id">
-          <router-link :to="'/db/'+db.id+'/tables'">{{db.db_name}}</router-link>
+          <router-link :to="'/db/'+db.id+'/tables'">{{db.name}}</router-link>
         </md-list-item>
       </md-list>
 
@@ -53,7 +53,7 @@ export default {
 
       if (this.db_name === '') return
 
-      this.$http.post(this.$dbapiEndpoint + '/dbs', { db_name: this.db_name })
+      this.$http.post(this.$dbapiEndpoint + '/dbs', { name: this.db_name })
         .then(function(response) {
           if (!response.data || !response.data.ok) console.log(response)
 

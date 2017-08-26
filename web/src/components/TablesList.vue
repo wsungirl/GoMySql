@@ -21,8 +21,8 @@
       </md-whiteframe>
 
       <md-list>
-        <md-list-item v-for="table in tables" :key="table.id">
-          <router-link :to="'/db/'+$route.params.db_id+'/tables/'+table.id+'/rows'">{{table.id}}</router-link>
+        <md-list-item v-for="table in tables" :key="table.name">
+          <router-link :to="'/db/'+$route.params.db_id+'/tables/'+table.name+'/rows'">{{table.name}}</router-link>
         </md-list-item>
       </md-list>
 

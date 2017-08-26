@@ -3,7 +3,8 @@
         "user": "root",
         "passwd": "password",
         "net": "tcp",
-        "addr": "localhost:3306",
-        "dbname": "dbname"
+        "addr": "172.17.0.2:3306",
+        "dbname": "gorm_db",
+        "parsetime": true
     }
 }
